@@ -1,0 +1,27 @@
+.page-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.ingredient-row {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+}
+
+mat-card-actions {
+  display: flex;
+  gap: 8px;
+  padding: 16px;
+}
+
+.empty-state {
+  color: #888;
+  text-align: center;
+  padding: 24px;
+}

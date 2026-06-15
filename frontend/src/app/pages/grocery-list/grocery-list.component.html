@@ -1,0 +1,29 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Grocery List</mat-card-title>
+    @if (items.length > 0) {
+      <span class="count">{{ checkedCount }} / {{ items.length }} checked</span>
+    }
+  </mat-card-header>
+  <mat-card-content>
+    @if (items.length === 0) {
+      <p class="empty-state">No meals planned this week. Add recipes to your calendar first!</p>
+    }
+    <mat-list>
+      @for (item of items; track item.name) {
+        <mat-list-item>
+          <mat-checkbox [(ngModel)]="item.checked" color="primary">
+            <span [class.strikethrough]="item.checked">{{ item.name }}</span>
+          </mat-checkbox>
+        </mat-list-item>
+      }
+    </mat-list>
+  </mat-card-content>
+  @if (checkedCount > 0) {
+    <mat-card-actions>
+      <button mat-raised-button color="warn" (click)="clearChecked()">
+        <mat-icon>delete_sweep</mat-icon> Clear Checked
+      </button>
+    </mat-card-actions>
+  }
+</mat-card>

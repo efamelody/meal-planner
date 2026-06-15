@@ -1,0 +1,36 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Weekly Meal Plan</mat-card-title>
+    <div class="nav-row">
+      <button mat-icon-button (click)="previousWeek()"><mat-icon>chevron_left</mat-icon></button>
+      <span>{{ weekStart | date }}</span>
+      <button mat-icon-button (click)="nextWeek()"><mat-icon>chevron_right</mat-icon></button>
+    </div>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="calendar-grid">
+      <div class="header-cell">Date</div>
+      @for (day of weekDays; track day.getTime()) {
+        <div class="header-cell">{{ day | date:'EEE M/d' }}</div>
+      }
+
+      @for (mealType of mealTypes; track mealType) {
+        <div class="time-cell">{{ mealType }}</div>
+        @for (day of weekDays; track day.getTime()) {
+          <div class="meal-cell" (click)="openPicker(day, mealType)">
+            @if (getMealPlan(day, mealType); as plan) {
+              <div class="assigned">
+                <span>{{ plan.recipe.name }}</span>
+                <button mat-icon-button class="remove-btn" (click)="removeMealPlan(plan.id); $event.stopPropagation()">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </div>
+            } @else {
+              <span class="add-hint">+ Add</span>
+            }
+          </div>
+        }
+      }
+    </div>
+  </mat-card-content>
+</mat-card>

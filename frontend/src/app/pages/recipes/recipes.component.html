@@ -1,0 +1,71 @@
+<div class="page-layout">
+  <mat-card class="form-card">
+    <mat-card-header>
+      <mat-card-title>New Recipe</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Recipe Name</mat-label>
+        <input matInput [(ngModel)]="name" placeholder="e.g. Chicken Stir Fry" />
+      </mat-form-field>
+
+      <div class="ingredient-row">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Ingredients</mat-label>
+          <input matInput [(ngModel)]="ingredientInput" (keyup.enter)="addIngredient()" placeholder="Add an ingredient" />
+        </mat-form-field>
+        <button mat-mini-fab color="primary" (click)="addIngredient()" [disabled]="!ingredientInput.trim()">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+
+      @if (ingredients.length > 0) {
+        <mat-chip-set>
+          @for (ing of ingredients; track ing) {
+            <mat-chip [removable]="true" (removed)="removeIngredient(ing)">
+              {{ ing }}
+              <mat-icon matChipRemove>cancel</mat-icon>
+            </mat-chip>
+          }
+        </mat-chip-set>
+      }
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button color="accent" (click)="estimateCalories()"
+              [disabled]="!name || ingredients.length === 0 || loading">
+        {{ loading ? 'Estimating...' : 'Estimate Calories' }}
+      </button>
+      <button mat-raised-button color="primary" (click)="saveRecipe()"
+              [disabled]="!name || ingredients.length === 0 || !estimation">
+        Save Recipe
+      </button>
+    </mat-card-actions>
+
+    @if (estimation) {
+      <mat-card-content>
+        <mat-card-subtitle>Calorie Estimation</mat-card-subtitle>
+        <p><strong>{{ estimation.estimatedCalories }}</strong> kcal</p>
+        <p>{{ estimation.summary }}</p>
+      </mat-card-content>
+    }
+  </mat-card>
+
+  <mat-card class="list-card">
+    <mat-card-header>
+      <mat-card-title>Saved Recipes</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      @if (recipes.length === 0) {
+        <p class="empty-state">No recipes yet. Create your first one!</p>
+      }
+      <mat-list>
+        @for (recipe of recipes; track recipe.id) {
+          <mat-list-item>
+            <span matListItemTitle>{{ recipe.name }}</span>
+            <span matListItemLine>{{ recipe.estimatedCalories }} kcal</span>
+          </mat-list-item>
+        }
+      </mat-list>
+    </mat-card-content>
+  </mat-card>
+</div>

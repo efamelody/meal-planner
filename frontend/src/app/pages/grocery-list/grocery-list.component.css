@@ -1,0 +1,21 @@
+mat-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.count {
+  color: #888;
+  font-size: 14px;
+}
+
+.empty-state {
+  color: #888;
+  text-align: center;
+  padding: 32px;
+}
+
+.strikethrough {
+  text-decoration: line-through;
+  color: #aaa;
+}
