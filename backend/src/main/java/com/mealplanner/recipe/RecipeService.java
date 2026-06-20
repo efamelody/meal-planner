@@ -21,6 +21,11 @@ public class RecipeService {
     }
 
     public CalorieEstimation estimateCalories(RecipeRequest request) {
+        if (geminiApiKey == null || geminiApiKey.isBlank()) {
+            int total = request.ingredients().size() * 150;
+            return new CalorieEstimation(total, "Rough estimate (no Gemini key configured)");
+        }
+
         String ingredients = String.join(", ", request.ingredients());
         String prompt = "Estimate the total calories for a meal with these ingredients: " + ingredients
                 + ". Respond with only JSON: {\"totalCalories\": <number>, \"summary\": \"<brief explanation>\"}";
@@ -33,9 +38,12 @@ public class RecipeService {
                 }
                 """.formatted(prompt.replace("\"", "\\\""));
 
-        String response = restTemplate.postForObject(url, requestBody, String.class);
-
-        return parseResponse(response != null ? response : "{}");
+        try {
+            String response = restTemplate.postForObject(url, requestBody, String.class);
+            return parseResponse(response != null ? response : "{}");
+        } catch (Exception e) {
+            return new CalorieEstimation(0, "Could not reach Gemini: " + e.getMessage());
+        }
     }
 
     public Recipe createRecipe(RecipeRequest request, int estimatedCalories) {
